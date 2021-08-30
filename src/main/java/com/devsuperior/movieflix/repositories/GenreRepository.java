@@ -1,5 +1,9 @@
 package com.devsuperior.movieflix.repositories;
 
-public interface GenreRepository {
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import com.devsuperior.movieflix.entities.Genre;
+
+public interface GenreRepository extends JpaRepository<Genre, Long> {
 
 }
