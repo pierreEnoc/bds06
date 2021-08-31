@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import com.devsuperior.movieflix.dto.UserDTO;
 import com.devsuperior.movieflix.entities.User;
 import com.devsuperior.movieflix.repositories.UserRepository;
-import com.devsuperior.movieflix.services.exceptions.EntityNotFoundException;
+import com.devsuperior.movieflix.services.exceptions.ResourceNotFoundException;
 
 @Service
 public class UserService {
@@ -18,7 +18,7 @@ public class UserService {
 	
 	public UserDTO findById(Long id) {
 		Optional<User> obj = userRepository.findById(id);
-		User entity = obj.orElseThrow(()-> new EntityNotFoundException("Entity not found"));
+		User entity = obj.orElseThrow(()-> new ResourceNotFoundException("Entity not found"));
 		return new UserDTO(entity);
 	}
 
