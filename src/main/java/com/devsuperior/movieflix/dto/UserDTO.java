@@ -11,10 +11,10 @@ public class UserDTO implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	private Long id;
-	@NotBlank(message = "Campo obrigatório")
+	//@NotBlank(message = "Campo obrigatório")
 	private String name;
 	
-	@Email(message = "Favor entrar um email válido")
+	//@Email(message = "Favor entrar um email válido")
 	private String email;
 	
 	public UserDTO() {
