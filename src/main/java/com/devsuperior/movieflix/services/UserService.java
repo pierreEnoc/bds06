@@ -5,6 +5,8 @@ import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -28,8 +30,14 @@ public class UserService implements UserDetailsService {
 	private AuthService authService;
 	
 	@Transactional(readOnly = true)
+	public Page<UserDTO> findAllPaged(Pageable pageable) {
+		Page<User> list = userRepository.findAll(pageable);
+		return list.map(x -> new UserDTO(x));
+	}
+	
+	@Transactional(readOnly = true)
 	public UserDTO findById(Long id) {
-		authService.validateSelfOrAdmin(id);
+		authService.validateSelfOrMember(id);
 		Optional<User> obj = userRepository.findById(id);
 		User entity = obj.orElseThrow(() -> new ResourceNotFoundException("Entity not found"));
 		return new UserDTO(entity);
@@ -37,13 +45,11 @@ public class UserService implements UserDetailsService {
 	
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		
 		User user = userRepository.findByEmail(username);
 		if (user == null) {
 			logger.error("User not found: " + username);
 			throw new UsernameNotFoundException("Email not found");
 		}
-		logger.info("User found: " + username);
 		return user;
 	}
 

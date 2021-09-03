@@ -1,11 +1,15 @@
 package com.devsuperior.movieflix.dto;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
 import com.devsuperior.movieflix.entities.Genre;
+import com.devsuperior.movieflix.entities.Movie;
 
 public class GenreDTO implements Serializable{
 	private static final long serialVersionUID = 1L;
@@ -14,6 +18,8 @@ public class GenreDTO implements Serializable{
 	@Size(min = 5, max = 60, message = "Deve ter entre 5 e 60 caracteres")
 	@NotBlank(message = "Campo requerido")
 	private String name;
+	
+	private List<MovieDTO> movies = new ArrayList<>();
 	
 	public GenreDTO() {
 		
@@ -25,8 +31,13 @@ public class GenreDTO implements Serializable{
 	}
 	
 	public GenreDTO(Genre entity) {
-		id = entity.getId();
-		name = entity.getName();
+		this.id = entity.getId();
+		this.name = entity.getName();
+	}
+	
+	public GenreDTO(Genre entity, List<Movie> movies) {
+		this(entity);
+		movies.forEach(mov -> this.movies.add(new MovieDTO(mov)));
 	}
 
 	public Long getId() {
@@ -45,9 +56,13 @@ public class GenreDTO implements Serializable{
 		this.name = name;
 	}
 
-	@Override
-	public String toString() {
-		return "GenreDTO [id=" + id + ", name=" + name + "]";
+	public List<MovieDTO> getMovies() {
+		return movies;
 	}
+
+	public void setMovies(List<MovieDTO> movies) {
+		this.movies = movies;
+	}
+
 	
 }
